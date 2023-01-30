@@ -1,14 +1,15 @@
-from rest_framework.viewsets import ModelViewSet
-from .models import Users
-from .models import Author
-from .serializers import AuthorModelSerializer
-from .serializers import UserModelSerializer
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
+
+from .models import User
+from .serializers import UserModelSerializer, UserModelSerializerV20
 
 
-class AuthorModelViewSet(ModelViewSet):
-    queryset = Author.objects.all()
-    serializer_class = AuthorModelSerializer
+class UserModelViewSet(GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
 
-class UserModelViewSet(ModelViewSet):
-    queryset = Users.objects.all()
-    serializer_class = UserModelSerializer
+    queryset = User.objects.filter(is_active=True)
+
+    def get_serializer_class(self):
+        if self.request.version == '2.0':
+            return UserModelSerializerV20
+        return UserModelSerializer

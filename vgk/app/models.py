@@ -1,18 +1,12 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
-from uuid import uuid4
 
 
-class Author(models.Model):
-    id = models.UUIDField(default=uuid4, primary_key=True)
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
-    birthday_year = models.PositiveIntegerField()
+class User(AbstractUser):
+    ROLE_CHOICES = (("pm", "project manager"), ("dev", "developer"))
+    email = models.EmailField(max_length=254, unique=True, verbose_name="email")
+    role = models.CharField(max_length=3, choices=ROLE_CHOICES, default="dev", verbose_name="role")
 
-
-class Users(models.Model):
-    id = models.UUIDField(default=uuid4, primary_key=True)
-    username = models.CharField(max_length=64)
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
-    email = models.EmailField(unique=True)
-    birthday_year = models.PositiveIntegerField()
+    class Meta:
+        verbose_name = "User"
+        verbose_name_plural = "Users"
