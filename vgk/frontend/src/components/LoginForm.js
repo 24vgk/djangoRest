@@ -30,14 +30,6 @@ class LoginForm extends React.Component {
         });
     }
 
-    logOut() {
-    localStorage.setItem('token', '')
-    localStorage.setItem('currentUser', '')
-    this.setState({
-      'token': '',
-      'currentUser': '',
-    }, this.getData)
-  }
 
     render() {
         return (
